@@ -17,13 +17,14 @@ the platinum at difficulty 4/10, in a single playthrough.
   with export to a JSON file and import back.
 - **Search & filters** — search across names, descriptions and guides; filter by
   kind (story, side quests, activities, collectibles, exploration, robberies,
-  misc, missable), by grade, and by earned / remaining.
+  misc), by grade, and by earned / remaining.
 - **Spoiler-free mode** — hides the names and descriptions of story and hidden
   trophies until you earn them.
 - **Trophy detail pane** — a guide in our own words for every trophy, with steps
   where they help, and the sources each fact comes from.
 - **Roadmap to the platinum** — three stages (story 60–80 h, 100% Completion
-  ~100 h, cleanup ~10 h) plus the full 35-item 100% Completion checklist.
+  ~100 h, cleanup ~10 h) plus the full 35-item 100% Completion checklist, each
+  line checkable and saved.
 - **Missables page** — the one trophy that can pass you by (Positive Mental
   Attitude, Chapter 1 balcony meditation) and why everything else is safe.
 - **Sources page** — every source the guides draw on, and how we mark
@@ -35,10 +36,9 @@ the platinum at difficulty 4/10, in a single playthrough.
 The game is a day old and the community is still confirming the hidden
 trophies. This guide says plainly where it stands:
 
-- **48 trophies** — verified by at least two independent guides.
-- **4 trophies** — reported by one guide so far (In The Beginning…, Capital
-  Offense, Ten Pin, The Truth Is Out There). The method is given, labelled as
-  reported, with its source.
+- **37 trophies** — verified by at least two independent guides.
+- **15 trophies** — reported by one guide so far (PowerPyx). The method is given,
+  labelled as reported, with its source.
 - **2 trophies** — partly unconfirmed (Positive Mental Attitude: whether the
   Chapter 1 meditation is required; Fair Game: which animal unlocks it).
 - **1 trophy** — method unconfirmed (Bad Luck, I Guess). No verified unlock
