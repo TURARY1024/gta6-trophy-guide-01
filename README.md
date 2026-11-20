@@ -1,8 +1,8 @@
 # Leonida Platinum — GTA VI Trophy Guide & Tracker
 
-[![make.fun](https://img.shields.io/badge/make.fun-bounty-blue)](https://make.fun/c/gta6-trophy-guide-01)
-[![owner](https://img.shields.io/badge/owner-turary1024-6a5acd)](https://github.com/turary1024)
-[![repo](https://img.shields.io/badge/repo-gta6--trophy--guide--01-ff5c7a)](https://github.com/turary1024/gta6-trophy-guide-01)
+[![make.fun · gta6-trophy-guide-01](https://make.fun/badge/gta6-trophy-guide-01.svg)](https://make.fun/bounty/gta6-trophy-guide-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
+[![rank](https://make.fun/badge/gta6-trophy-guide-01/TURARY1024/gta6-trophy-guide-01/rank.svg)](https://make.fun/bounty/gta6-trophy-guide-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
+[![reward](https://make.fun/badge/gta6-trophy-guide-01/TURARY1024/gta6-trophy-guide-01/reward.svg)](https://make.fun/bounty/gta6-trophy-guide-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 An offline, open-source guide and tracker for all **55 PlayStation 5 trophies** of
