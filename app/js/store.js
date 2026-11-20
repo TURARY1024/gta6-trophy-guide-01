@@ -1,97 +1,60 @@
-// Saved progress: the earned set lives in localStorage only, under one
-// key, and can be exported to a JSON file and imported back. Nothing
-// here touches the network.
+// Progress storage: everything the tracker remembers lives in this browser's
+// localStorage, under versioned keys, and can be exported to a file and imported
+// back. Nothing is sent anywhere.
+const EARNED_KEY = 'leonida-platinum-earned-v1';
+const CHECKLIST_KEY = 'leonida-platinum-checklist-v1';
 
-export const STORAGE_KEY = 'leonida-platinum-progress-v1';
-export const SPOILER_KEY = 'leonida-platinum-spoilers-v1';
-
-/** Read the earned set from localStorage. Returns a Set of trophy ids. */
 export function loadEarned() {
+  return loadSet(EARNED_KEY);
+}
+
+export function saveEarned(earned) {
+  saveSet(EARNED_KEY, earned);
+}
+
+export function loadChecklist() {
+  return loadSet(CHECKLIST_KEY);
+}
+
+export function saveChecklist(done) {
+  saveSet(CHECKLIST_KEY, done);
+}
+
+function loadSet(key) {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(key);
     if (!raw) return new Set();
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return new Set();
-    return new Set(parsed.filter((id) => typeof id === 'string'));
+    const values = JSON.parse(raw);
+    return new Set(Array.isArray(values) ? values : []);
   } catch {
     return new Set();
   }
 }
 
-/** Write the earned set to localStorage. */
-export function saveEarned(earned) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...earned].sort()));
-  } catch {
-    // Storage full or unavailable: progress just won't persist.
-  }
+function saveSet(key, values) {
+  localStorage.setItem(key, JSON.stringify([...values].sort()));
 }
 
-/** Toggle one trophy's earned state. Returns the new earned set. */
-export function toggleEarned(earned, id) {
-  const next = new Set(earned);
-  if (next.has(id)) next.delete(id);
-  else next.add(id);
-  saveEarned(next);
-  return next;
+// The demo set used by ?demo=1 (and by the screenshots): 13 earned trophies
+// spread across the story, activities and robberies, so the views show progress.
+export function demoEarned() {
+  return new Set([2, 3, 4, 5, 8, 15, 16, 20, 21, 30, 35, 42, 52]);
 }
 
-/** Replace the earned set wholesale (used by import). */
-export function setEarned(earned) {
-  saveEarned(earned);
-  return new Set(earned);
+export function downloadProgress(earned, checklist) {
+  const payload = { app: 'leonida-platinum', earned: [...earned].sort(), checklist: [...checklist].sort() };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const anchor = document.createElement('a');
+  anchor.href = URL.createObjectURL(blob);
+  anchor.download = 'leonida-platinum-progress.json';
+  anchor.click();
+  URL.revokeObjectURL(anchor.href);
 }
 
-/** Serialize the earned set for export. */
-export function exportProgress(earned) {
-  return JSON.stringify(
-    { app: 'leonida-platinum', version: 1, earned: [...earned].sort() },
-    null,
-    2,
-  );
-}
-
-/** Parse an imported progress file. Returns a Set, or throws a message. */
-export function parseImportedProgress(text) {
-  let parsed;
-  try {
-    parsed = JSON.parse(text);
-  } catch {
-    throw new Error('That file is not valid JSON.');
-  }
-  const ids = Array.isArray(parsed) ? parsed : parsed.earned;
-  if (!Array.isArray(ids)) {
-    throw new Error('That file has no earned list in it.');
-  }
-  return new Set(ids.filter((id) => typeof id === 'string'));
-}
-
-/** Download a text file from the browser. Used for progress export. */
-export function downloadText(filename, text) {
-  const blob = new Blob([text], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-/** Spoiler setting: true hides un-earned story/hidden trophies. */
-export function loadSpoilers() {
-  try {
-    return localStorage.getItem(SPOILER_KEY) === '1';
-  } catch {
-    return false;
-  }
-}
-
-export function saveSpoilers(on) {
-  try {
-    localStorage.setItem(SPOILER_KEY, on ? '1' : '0');
-  } catch {
-    // Ignore: the setting just won't persist.
-  }
+export async function readProgressFile(file) {
+  const text = await file.text();
+  const payload = JSON.parse(text);
+  const earned = new Set(Array.isArray(payload.earned) ? payload.earned : []);
+  const checklist = new Set(Array.isArray(payload.checklist) ? payload.checklist : []);
+  return { earned, checklist };
 }

@@ -1,61 +1,49 @@
-// Trophy data access: loads app/data/trophies.json (a file of this app,
-// fetched over the app's own server, never the network) and gives the
-// rest of the app one shared, sorted copy of the 55 trophies.
+// Loads the trophy data and names the sources every guide cites. A source is
+// cited, never copied: the guides in trophies.json are written in our own words,
+// and each trophy names the guides its facts come from.
+export async function loadTrophies() {
+  const response = await fetch('data/trophies.json');
+  if (!response.ok) throw new Error('Could not load data/trophies.json');
+  const doc = await response.json();
+  return doc.trophies;
+}
 
-export const GRADE_ORDER = { platinum: 0, gold: 1, silver: 2, bronze: 3 };
-
-export const GRADE_LABELS = {
-  platinum: 'Platinum',
-  gold: 'Gold',
-  silver: 'Silver',
-  bronze: 'Bronze',
-};
-
-export const KIND_LABELS = {
-  story: 'Story',
-  side: 'Side quests',
-  activities: 'Activities',
-  collectibles: 'Collectibles',
-  exploration: 'Exploration',
-  robbery: 'Robberies',
-  misc: 'Misc',
-  platinum: 'Platinum',
-  completion: '100% completion',
-};
-
-export const STATUS_LABELS = {
-  verified: 'Verified',
+export const CONFIDENCE_LABELS = {
+  verified: 'Verified — 2+ guides agree',
   reported: 'Reported — single source',
-  partial: 'Partly unconfirmed',
+  partly: 'Partly unconfirmed',
   unconfirmed: 'Method unconfirmed',
 };
 
-let cachedTrophies = null;
-
-/** Fetch the trophy list once and cache it. Returns the array of trophies. */
-export async function loadTrophies() {
-  if (cachedTrophies) return cachedTrophies;
-  const response = await fetch('data/trophies.json');
-  if (!response.ok) throw new Error('Could not load data/trophies.json');
-  const data = await response.json();
-  const list = Array.isArray(data) ? data : data.trophies;
-  cachedTrophies = list.slice().sort(compareTrophies);
-  return cachedTrophies;
-}
-
-/** Official-list order: platinum first, then gold, silver, bronze,
-    each group in the order PlayStation lists the trophies. */
-export function compareTrophies(a, b) {
-  const byGrade = GRADE_ORDER[a.grade] - GRADE_ORDER[b.grade];
-  if (byGrade !== 0) return byGrade;
-  return 0; // stable sort keeps the file's order inside a grade
-}
-
-export function trophyById(trophies, id) {
-  return trophies.find((trophy) => trophy.id === id) || null;
-}
-
-/** A short, stable key for a trophy, used in saved progress. */
-export function trophyKey(trophy) {
-  return trophy.id;
-}
+// Every source the guides draw on. URLs are the pages as published; the guide
+// itself fetches nothing at run time — a link opens only when the reader follows it.
+export const SOURCES = {
+  'PowerPyx': {
+    label: 'PowerPyx — GTA 6 Trophy Guide & Roadmap',
+    url: 'https://www.powerpyx.com/gta-6-grand-theft-auto-vi-trophy-guide-roadmap/',
+  },
+  'PowerPyx 100%': {
+    label: 'PowerPyx — GTA 6 100% Completion Checklist & Guide',
+    url: 'https://www.powerpyx.com/gta-6-100-completion-checklist-guide/',
+  },
+  'Push Square': {
+    label: 'Push Square — GTA 6 Trophy Guide & Roadmap',
+    url: 'https://www.pushsquare.com/guides/gta-6-trophy-guide-and-roadmap',
+  },
+  KeenGamer: {
+    label: 'KeenGamer — GTA 6 Trophy Guide & Platinum Roadmap',
+    url: 'https://www.keengamer.com/articles/guides/gta-6-trophy-guide-platinum-roadmap-all-55-trophies/',
+  },
+  'games.gg': {
+    label: 'games.gg — GTA 6 Trophy List',
+    url: 'https://www.games.gg/grand-theft-auto-vi/guides/complete-grand-theft-auto-6-trophy-list/',
+  },
+  'The Gamers Hub': {
+    label: 'The Gamers Hub — GTA 6 100% Completion Checklist',
+    url: 'https://www.thegamershub.co/gta-6/checklist/',
+  },
+  'Exophase / PSNProfiles': {
+    label: 'Exophase / PSNProfiles — the official trophy list (names, descriptions, grades)',
+    url: null,
+  },
+};
